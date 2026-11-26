@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Email Challenge – Highlight the Answers</title>
+<style>
+:root{--bg:linear-gradient(135deg,#ffd6e8,#d6e4ff 55%,#d9f7e6);--win:#fff;--ink:#1d1d1f;--muted:#86868b;--tb:#ececec;--tb2:#f6f6f6;--line:#e3e3e6;--hov:rgba(255,214,0,.35);
+--c1:#cfe3ff;--c2:#ffd3e6;--c3:#cdf5d8;--c4:#ffe0b8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:none){:root:not([data-theme="light"]){--bg:linear-gradient(135deg,#2b1f3a,#1f2a44 55%,#1f3a30);--win:#2a2a2d;--ink:#f5f5f7;--muted:#a1a1a6;--tb:#3a3a3d;--tb2:#303033;--line:#434347;--c1:#2b4a7a;--c2:#7a2b55;--c3:#235c3a;--c4:#7a5420}}
+:root[data-theme="dark"]{--bg:linear-gradient(135deg,#2b1f3a,#1f2a44 55%,#1f3a30);--win:#2a2a2d;--ink:#f5f5f7;--muted:#a1a1a6;--tb:#3a3a3d;--tb2:#303033;--line:#434347;--c1:#2b4a7a;--c2:#7a2b55;--c3:#235c3a;--c4:#7a5420}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}body{margin:0;background:#fff;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Helvetica,Arial,sans-serif;padding:8px 14px}
+.wrap{max-width:1250px;margin:auto;height:100%;display:flex;flex-direction:column}
+h1{text-align:center;margin:2px 0;font-size:clamp(1.3rem,3vw,1.9rem)}
+.sub{text-align:center;color:var(--muted);margin:0 0 14px}
+#res{display:none;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;background:var(--win);border-radius:16px;padding:12px 18px;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.score{font-size:2.2rem;font-weight:800}
+.pill{padding:6px 16px;border-radius:999px;font-weight:700}
+.pill.a{background:#cdf5d8;color:#14532d}.pill.b{background:#ffd3d3;color:#7f1d1d}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+@media(max-width:480px){.grid{grid-template-columns:1fr}}
+.win{background:var(--win);border-radius:12px;box-shadow:0 20px 40px rgba(0,0,0,.2),0 0 0 1px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column}
+.tb{background:linear-gradient(var(--tb2),var(--tb));padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block}
+.tb .t{flex:1;text-align:center;font-size:.85rem;font-weight:600;color:var(--muted);margin-right:48px}
+.tools{display:flex;gap:16px;padding:6px 16px;border-bottom:1px solid var(--line);color:var(--muted);font-size:1rem;background:var(--tb2)}
+.mh{display:flex;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.av{width:42px;height:42px;border-radius:50%;background:linear-gradient(#a8b4c4,#7d8a9c);color:#fff;font-weight:700;font-size:1.2rem;display:flex;align-items:center;justify-content:center;flex:none}
+.mi{flex:1;min-width:0;line-height:1.35}
+.fr{display:flex;justify-content:space-between;font-size:.95rem}.fr span{color:var(--muted);font-size:.8rem}
+.sj{font-weight:600;font-size:.95rem}.to{font-size:.8rem;color:var(--muted)}
+.body{padding:16px 20px;flex:1;font-size:1.04rem;line-height:1.7}
+.body p{margin:0 0 9px}
+.q{display:inline-block;cursor:pointer;border-radius:10px;padding:2px 8px;margin:2px 0;border:2px solid transparent;background:rgba(127,127,127,.12);transition:.2s}
+.q:hover{border-color:#f5b800}
+.q.act{box-shadow:0 0 0 3px #fff176;background:#fff176;color:#3a3340}
+.n{display:inline-flex;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;margin-right:4px}
+.k1{background:#3b82f6}.k2{background:#ec4899}.k3{background:#22a85a}.k4{background:#f59e0b}
+.w{border-radius:5px;padding:1px 0;cursor:pointer;user-select:none;-webkit-user-select:none}
+.w:hover{background:var(--hov)}
+.w.a1{background:var(--c1);box-shadow:0 2px 0 #3b82f6}.w.a2{background:var(--c2);box-shadow:0 2px 0 #ec4899}
+.w.a3{background:var(--c3);box-shadow:0 2px 0 #22a85a}.w.a4{background:var(--c4);box-shadow:0 2px 0 #f59e0b}
+.w.drag{background:#e5e7eb;color:#333}
+.w.ck1{background:#3b82f6;color:#fff;box-shadow:none}.w.ck2{background:#ec4899;color:#fff;box-shadow:none}.w.ck3{background:#22a85a;color:#fff;box-shadow:none}.w.ck4{background:#f59e0b;color:#fff;box-shadow:none}
+.w.wrongsel{background:transparent;box-shadow:none;text-decoration:underline dotted #dc2626 3px;text-underline-offset:4px}
+.w .n{width:18px;height:18px;font-size:.65rem;margin-right:3px;background:#fff!important;color:#333}
+.mk{font-weight:800;margin-left:4px}.ok{color:#16a34a}.no{color:#dc2626}
+.bar{text-align:center;margin:16px 0}
+button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:11px 28px;cursor:pointer;color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.2)}
+#sub{background:#0a84ff}#again{background:#22a85a;padding:8px 22px}
+button:disabled{opacity:.45;cursor:not-allowed}
+.hint{color:var(--muted);margin-top:8px;min-height:1.3em}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:8px}.top h1{font-size:1.25rem;margin:0;white-space:nowrap}.top .hint{flex:1;margin:0;font-size:.9rem;min-width:0}
+#res{padding:6px 14px;margin-bottom:8px;box-shadow:0 2px 10px rgba(0,0,0,.15)}.score{font-size:1.6rem}
+.grid{flex:1;min-height:0}.win{min-height:0}.body{overflow:hidden;min-height:0;line-height:1.5;padding:12px 18px}.body p{margin:0 0 6px}.mh{padding:8px 16px}.tools{padding:4px 16px}
+</style></head><body><div class="wrap">
+<div class="top"><h1>✉️ Email Challenge</h1><div class="hint" id="hint"></div><button id="sub" disabled>SUBMIT</button></div>
+<div id="res"><span class="score" id="pct"></span><span class="pill a" id="cr"></span><span class="pill b" id="wr"></span><button id="again">TRY AGAIN</button></div>
+<div class="grid">
+<div class="win"><div class="tb"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span><span class="t">Email 1 – Incoming Email</span></div>
+<div class="tools"><span>🗑</span><span>↩︎</span><span>↪︎</span><span>⚑</span></div>
+<div class="mh"><div class="av">M</div><div class="mi"><div class="fr"><b>Mark</b><span>Today</span></div><div class="sj">Back to school …</div><div class="to">To: Jamal</div></div></div>
+<div class="body"><p>Hi Jamal,</p><p>How’s it going? We miss you on the football team – I’m the new captain!</p>
+<p><span class="q" data-q="1"></span></p><p><span class="q" data-q="2"></span></p><p><span class="q" data-q="3"></span></p><p><span class="q" data-q="4"></span></p>
+<p style="margin-top:10px">Speak soon,<br>Mark</p></div></div>
+<div class="win"><div class="tb"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span><span class="t">Email 2 – Reply Email</span></div>
+<div class="tools"><span>🗑</span><span>↩︎</span><span>↪︎</span><span>⚑</span></div>
+<div class="mh"><div class="av">J</div><div class="mi"><div class="fr"><b>Jamal</b><span>Today</span></div><div class="sj">RE: Back to school …</div><div class="to">To: Mark</div></div></div>
+<div class="body" id="R"></div></div>
+</div>
+</div>
+<script>
+const Q={1:"What’s your room like?",2:"What do you like doing in your free time where you live now?",3:"What’s your new school like?",4:"Have you got any new friends yet?"};
+const paras=["Hi Mark,","It’s great to hear from you. Congratulations on becoming captain! Awesome news!",
+"I love our new house. It’s brighter, bigger and there’s a garden. Brighton isn’t as big as Manchester, but there are loads of things to do. There’s a really good football team here. They’re great! I go to watch them play every weekend with my dad and sister.",
+"My school is the largest in Brighton, but it isn’t as modern as Victoria Park. In ICT, for example, there aren’t enough laptops for everyone. I met a boy called Simon on my first day. He’s into computer games like me. I guess he’s my best mate at the moment!","Speak soon,<br>Jamal"];
+const KEY={2:{key:["i go to watch them play every weekend with my dad and sister"],opt:["there’s a really good football team here","they’re great"]},
+3:{key:["my school is the largest in brighton but it isn’t as modern as victoria park"],opt:["in ict for example there aren’t enough laptops for everyone"]},
+4:{key:["i met a boy called simon on my first day","he’s my best mate at the moment"],opt:["he’s into computer games like me","i guess"]}};
+const R=document.getElementById('R');let words=[],cur=0,asg,done,ds=null,dend=null;
+const norm=t=>t.toLowerCase().replace(/[^a-z’ ]/g,'');
+function build(){let h='',i=0;
+ paras.forEach((p,pi)=>{if(pi==0||pi==4){h+='<p>'+p+'</p>';return}
+  h+='<p>'+p.split(' ').map(t=>`<span class="w" data-i="${i}">${t}${(words[i++]={t:norm(t)},'')}</span>`).join(' ')+'</p>'});
+ R.innerHTML=h;
+ for(const q in KEY){for(const k of ['key','opt']){KEY[q][k+'S']=new Set();KEY[q][k].forEach(ph=>{const a=ph.split(' ');
+  for(let s=0;s<=words.length-a.length;s++){if(a.every((x,j)=>words[s+j].t==x)){a.forEach((_,j)=>KEY[q][k+'S'].add(s+j));break}}})}}
+ document.querySelectorAll('.q').forEach(e=>{e.innerHTML=`<span class="n k${e.dataset.q}">${e.dataset.q}</span>${Q[e.dataset.q]}<span class="mk"></span><span class="nt"></span>`;e.onclick=()=>{if(!done){cur=+e.dataset.q;render()}}});
+ R.onpointerdown=e=>{const w=e.target.closest('.w');if(!w||done)return;if(!cur){hint('Pick a question in Email 1 first!');return}ds=dend=+w.dataset.i;render();e.preventDefault()};
+ R.onpointermove=e=>{if(ds===null||e.pointerType=='touch')return;const w=document.elementFromPoint(e.clientX,e.clientY)?.closest('.w');if(w){dend=+w.dataset.i;render()}};
+ window.onpointerup=()=>{if(ds===null)return;const a=Math.min(ds,dend),b=Math.max(ds,dend);let all=true;
+  for(let i=a;i<=b;i++)if(asg[i]!=cur)all=false;
+  for(let i=a;i<=b;i++){if(all)delete asg[i];else asg[i]=cur}
+  ds=dend=null;render()};
+}
+function hint(m){document.getElementById('hint').textContent=m}
+function cnt(q){return Object.values(asg).filter(v=>v==q).length}
+function ready(){return Object.keys(asg).length>0}
+function render(){
+ const lo=ds===null?0:Math.min(ds,dend),hi=ds===null?-1:Math.max(ds,dend);
+ document.querySelectorAll('.w').forEach(e=>{const i=+e.dataset.i,a=asg[i];
+  e.className='w'+(a?' a'+a:'')+(i>=lo&&i<=hi?' drag':'');
+  e.querySelectorAll('.n').forEach(x=>x.remove());
+  if(done){let kq=0;for(const q in KEY)if(KEY[q].keyS.has(i))kq=q;
+   if(kq){e.className='w ck'+kq;if(i==Math.min(...KEY[kq].keyS)){const b=document.createElement('span');b.className='n';b.textContent=kq;e.prepend(b)}}
+   else if(a&&(a==1||!KEY[a].optS.has(i)))e.className='w wrongsel'}});
+ document.querySelectorAll('.q').forEach(e=>{const q=+e.dataset.q;e.classList.toggle('act',cur==q&&!done);
+  const m=e.querySelector('.mk');if(done){const g=grade(q);m.textContent=g?'✓':'✗';m.className='mk '+(g?'ok':'no')}else m.textContent='';
+  const nt=e.querySelector('.nt');nt.className='nt no';nt.textContent=done&&q==1?' ✗ No answer in Email 2':''});
+ document.getElementById('sub').disabled=done||!ready();
+ if(!done)hint(ready()?'Finished all the questions? Press SUBMIT.':'Pick a question, then highlight the answer words.');
+}
+function grade(q){
+ if(q==1)return cnt(1)==0;
+ const sel=Object.keys(asg).filter(i=>asg[i]==q).map(Number),K=KEY[q];
+ const hit=[...K.keyS].filter(i=>sel.includes(i)).length;
+ const bad=sel.filter(i=>!K.keyS.has(i)&&!K.optS.has(i)).length;
+ return hit>=Math.ceil(K.keyS.size*0.6)&&bad<=Math.max(2,Math.floor(sel.length*0.3));
+}
+document.getElementById('sub').onclick=()=>{done=true;let ok=0;for(let q=1;q<=4;q++)if(grade(q))ok++;render();hint('');
+ document.getElementById('pct').textContent=Math.round(ok/4*100)+'%';
+ document.getElementById('cr').textContent='✓ Correct: '+ok;document.getElementById('wr').textContent='✗ Wrong: '+(4-ok);
+ document.getElementById('res').style.display='flex';fit()};
+function reset(){asg={};done=false;cur=0;document.getElementById('res').style.display='none';render();fit()}
+document.getElementById('again').onclick=()=>reset();
+function fit(){const bs=[...document.querySelectorAll('.body')];let lo=8,hi=22;const ok=s=>{bs.forEach(b=>b.style.fontSize=s+'px');return bs.every(b=>b.scrollHeight<=b.clientHeight+1)};while(hi-lo>.4){const m=(lo+hi)/2;if(ok(m))lo=m;else hi=m}ok(lo)}
+build();reset();fit();addEventListener('resize',fit);
+</script></body></html>
